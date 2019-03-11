@@ -1,0 +1,8 @@
+#VERSION 1.0
+
+#HEADER
+LTspice Simulation output data
+Simulation Parameters: This is a test. Delete it!
+#HEADER
+
+s Group0Desc "frequency Cvar=4p (Run: 1/10)";
