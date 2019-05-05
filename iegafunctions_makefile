@@ -7,9 +7,10 @@ CC = clang++
 #Where hpp files are saved
 IEGA_INCLUDE = /usr/local/include/IEGA
 
-#Where object file is saved
+#Where archive file is saved
 IEGA_LIB = /usr/local/lib/
 
+#Where individual object files are saved
 IEGA_LIB_OBJS = /usr/local/lib/IEGA\ source/Objects/
 
 #Where cpp files are saved
@@ -31,7 +32,7 @@ all: string_manip.cpp stdutil.cpp
 
 install: all
 	cp *.hpp $(IEGA_INCLUDE)
-	cp s*.cpp $(IEGA_SRC)
+	cp *.cpp $(IEGA_SRC)
 	cp stdutil.o $(IEGA_LIB_OBJS)
 	cp string_manip.o $(IEGA_LIB_OBJS)
 	ar rvs $(IEGA_LIB)$(ARCHIVE_FILE) $(DIR_OBJECT_FILES)

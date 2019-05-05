@@ -23,7 +23,7 @@ OBJECT_FILES = string_manip.o stdutil.o
 
 #Same as above, but you must append '$(IEGA_LIB_OBJS)' in from of each entry. (I know
 #this is tedious, but it saves copying things all around your hard drive).
-DIR_OBJECT_FILES = $(IEGA_LIB_OBJS)KVar.o
+DIR_OBJECT_FILES = 
 
 kv_test:kv_test.cpp KVar.o
 	$(CC) -o kv_test kv_test.cpp KVar.o -lIEGA -L$(IEGA_LIB)
