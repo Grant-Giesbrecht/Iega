@@ -22,11 +22,9 @@ else
     UNAME_S := $(shell uname -s)
     ifeq ($(UNAME_S),Linux)
         CC = g++ -std=c++11
-				echo "Linux"
     endif
     ifeq ($(UNAME_S),Darwin)
         CC = clang++ -std=c++11
-				echo "OS X"
     endif
 endif
 
