@@ -62,11 +62,11 @@ all: KMatrixHelpers.cpp  string_manip.cpp stdutil.cpp KVar.cpp KTable.cpp
 
 #Install IEGA on your system...
 install: all
-	mkdir -p $(IEGA_INCLUDE)
-	mkdir -p $(IEGA_LIB)
-	mkdir -p $(IEGA_LIB_OBJS)
-	mkdir -p $(IEGA_SRC)
-	cp *.hpp $(IEGA_INCLUDE)
-	cp *.cpp $(IEGA_SRC)
-	cp *.o $(IEGA_LIB_OBJS)
-	ar rvs $(IEGA_LIB)$(ARCHIVE_FILE) $(DIR_OBJECT_FILES)
+	sudo mkdir -p $(IEGA_INCLUDE)
+	sudo mkdir -p $(IEGA_LIB)
+	sudo mkdir -p $(IEGA_LIB_OBJS)
+	sudo mkdir -p $(IEGA_SRC)
+	sudo cp *.hpp $(IEGA_INCLUDE)
+	sudo cp *.cpp $(IEGA_SRC)
+	sudo cp *.o $(IEGA_LIB_OBJS)
+	sudo ar rvs $(IEGA_LIB)$(ARCHIVE_FILE) $(DIR_OBJECT_FILES)
