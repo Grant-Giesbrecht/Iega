@@ -2,8 +2,8 @@
 # if you'd like to install them in a custom location. Once you are satisfied with the
 # install location, run 'make -f makefile install' (without the quote marks).
 
-# This will install KMatrix, string_manip, stdutil, KTable
 #
+# This will install KMatrix, string_manip, stdutil, KTable, & KVector
 #
 
 CC = clang++ -std=c++11
