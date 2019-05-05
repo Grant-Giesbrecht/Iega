@@ -1,0 +1,4 @@
+###### The .gitignore for IEGA
+
+*.o
+*.a
