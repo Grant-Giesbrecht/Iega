@@ -11,6 +11,7 @@
 
 #include <stdio.h>
 #include <string>
+#include <vector>
 
 bool matrixFromString(std::string input, std::vector<std::vector<double> >& out);
 bool matrixFromString(std::string input, std::vector<std::vector<int> >& out);
