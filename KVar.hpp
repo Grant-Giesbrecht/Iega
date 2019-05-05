@@ -6,9 +6,9 @@
 
 //#include <IEGA/clc/Libraries/Eigen/Eigen>
 
-#include <IEGA/KMatrix.hpp>
-#include <IEGA/stdutil.hpp>
-#include <IEGA/string_manip.hpp>
+#include "KMatrix.hpp"
+#include "stdutil.hpp"
+#include "string_manip.hpp"
 
 #ifndef KVAR_HPP
 #define KVAR_HPP
@@ -71,7 +71,7 @@ public:
 	std::vector<std::string> get_variable_type_IDs(char type);
 	int num_variables();
 	bool get_var_index(std::string var_id, int* index);
-    
+
 	bool get_var_lindex(std::string var_id, int* index, char* type);
 	char get_var_type(std::string var_id);
 
@@ -102,7 +102,7 @@ public:
     std::string get_comment(std::string var_id, bool& success);
     std::string get_comment(std::string var_id);
     bool delete_var(std::string var_id);
-    
+
 	bool add_double(std::string var_id, double val, std::string comment="");
 	bool get_double(std::string var_id, double& out);
     bool set_double(std::string var_id, double in);
@@ -126,10 +126,10 @@ public:
     bool set_bool(std::string var_id, bool in);
     std::string get_header();
     void set_header(std::string);
-	
+
 	std::vector<std::string> getStrings();
 	void getStringsWithNames(std::vector<std::string>& contents, std::vector<std::string>& names);
-	
+
 
 	//Read write functions
 //	bool load_file_old(std::string filename, bool print_out=false); // DO THIS - Not yet done - headers not implemented, string reading must still incorperate special comments, I must compile and test the function, and I must write the function to do a full-match comment check (for // comments)
@@ -163,7 +163,7 @@ private:
 	//Vectors
     std::vector<aktc> variables;
     std::string header;
-    
+
 	std::vector<identifier> IDs;
 	std::vector<std::string> comments; //Alligns with IDs in vector
 	std::vector<double> double_vars;

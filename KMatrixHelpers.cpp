@@ -8,8 +8,8 @@
 
 #include "KMatrixHelpers.hpp"
 #include <vector>
-#include <IEGA/stdutil.hpp>
-#include <IEGA/string_manip.hpp>
+#include "stdutil.hpp"
+#include "string_manip.hpp"
 #include <sstream>
 
 const char* matrix_bounds_excep::what() const throw(){
@@ -22,17 +22,17 @@ const char* matrix_multiplication_exception::what() const throw(){
 
 /*
  Creates a 2D vector of int from a string. The result is saved to 'out'.
- 
+
  input - string interpreted as a matrix
  out - 2D vector in which result is saved
- 
+
  Returns true if creating vector was successful
  */
 bool matrixFromString(std::string input, std::vector<std::vector<int> >& out){
-    
+
     std::vector<std::vector<double> > temp;
     bool ret = matrixFromString(input, temp);
-    
+
     out.clear();
     std::vector<int> temp_int;
     for (int i = 0 ; i < temp.size() ; i++){
@@ -42,45 +42,45 @@ bool matrixFromString(std::string input, std::vector<std::vector<int> >& out){
         }
         out.push_back(temp_int);
     }
-    
+
     return ret;
 }
 
 /*
  Creates a 2D vector of doubles from a string. The result is saved to 'out'.
- 
+
  input - string interpreted as a matrix
  out - 2D vector in which result is saved
- 
+
  Returns true if creating vector was successful
  */
 bool matrixFromString(std::string input, std::vector<std::vector<double> >& out){
-    
+
     int c = -1;
     int r = 0;
     std::vector<double> values;
-    
+
     ensure_whitespace(input, ",;");
     std::vector<std::string> tokens = parse(input, " ");
-    
+
     int ticker = 0;
     bool add_line = false;
     bool req_commas = false;
     char phase = 'b';
     for (int i = 0 ; i < tokens.size() ; i++){
         if (isnum(tokens[i])){
-            
+
             if (req_commas && phase != 'c' && phase != 'n'){
                 std::cout << "ERROR: Failed to create matrix from string - missing comma before token " << i << ", '" << tokens[i] << "'. String:\n\t'" << input << "'" << std::endl;
                 return false;
             }
-            
+
             values.push_back(strtod(tokens[i]));
             ticker++;
             add_line = true;
             phase = 'v'; //var added
         }else if(tokens[i] == ";"){
-            
+
             if (phase == 'c'){
                 std::cout << "ERROR: Failed to create matrix from string - semicolon can not follow a comma. String:\n\t'" << input << "'" << std::endl;
                 return false;
@@ -88,7 +88,7 @@ bool matrixFromString(std::string input, std::vector<std::vector<double> >& out)
                 std::cout << "ERROR: Failed to create matrix from string - semicolon can not be first symbol. String:\n\t'" << input << "'" << std::endl;
                 return false;
             }
-            
+
             if (c == -1){
                 c = ticker;
             }else if(c != ticker){
@@ -110,15 +110,15 @@ bool matrixFromString(std::string input, std::vector<std::vector<double> >& out)
                 return false;
             }
         }else{
-            
+
         }
     }
-    
+
     if (add_line){
         c = ticker;
         r++;
     }
-    
+
     if (r < 0 || c < 0) return false;
     //Resize and fill array
     out.clear();
@@ -130,45 +130,45 @@ bool matrixFromString(std::string input, std::vector<std::vector<double> >& out)
         }
         out.push_back(temp);
     }
-    
+
     return true;
 }
 
 /*
  Creates a 2D vector of doubles from a string. The result is saved to 'out'.
- 
+
  input - string interpreted as a matrix
  out - 2D vector in which result is saved
- 
+
  Returns true if creating vector was successful
  */
 bool matrixFromString(std::string input, std::vector<std::vector<bool> >& out){
-	
+
 	int c = -1;
 	int r = 0;
 	std::vector<bool> values;
-	
+
 	ensure_whitespace(input, ",;");
 	std::vector<std::string> tokens = parse(input, " ");
-	
+
 	int ticker = 0;
 	bool add_line = false;
 	bool req_commas = false;
 	char phase = 'b';
 	for (int i = 0 ; i < tokens.size() ; i++){
 		if (to_uppercase(tokens[i]) == "TRUE" || to_uppercase(tokens[i]) == "FALSE"){
-			
+
 			if (req_commas && phase != 'c' && phase != 'n'){
 				std::cout << "ERROR: Failed to create matrix from string - missing comma before token " << i << ", '" << tokens[i] << "'. String:\n\t'" << input << "'" << std::endl;
 				return false;
 			}
-			
+
 			values.push_back(str_to_bool(tokens[i]));
 			ticker++;
 			add_line = true;
 			phase = 'v'; //var added
 		}else if(tokens[i] == ";"){
-			
+
 			if (phase == 'c'){
 				std::cout << "ERROR: Failed to create matrix from string - semicolon can not follow a comma. String:\n\t'" << input << "'" << std::endl;
 				return false;
@@ -176,7 +176,7 @@ bool matrixFromString(std::string input, std::vector<std::vector<bool> >& out){
 				std::cout << "ERROR: Failed to create matrix from string - semicolon can not be first symbol. String:\n\t'" << input << "'" << std::endl;
 				return false;
 			}
-			
+
 			if (c == -1){
 				c = ticker;
 			}else if(c != ticker){
@@ -198,15 +198,15 @@ bool matrixFromString(std::string input, std::vector<std::vector<bool> >& out){
 				return false;
 			}
 		}else{
-			
+
 		}
 	}
-	
+
 	if (add_line){
 		c = ticker;
 		r++;
 	}
-	
+
 	if (r < 0 || c < 0) return false;
 	//Resize and fill array
 	out.clear();
@@ -218,27 +218,27 @@ bool matrixFromString(std::string input, std::vector<std::vector<bool> >& out){
 		}
 		out.push_back(temp);
 	}
-	
+
 	return true;
 }
 
 /*
  Creates a 2D vector of doubles from a string. The result is saved to 'out'.
- 
+
  input - string interpreted as a matrix
  out - 2D vector in which result is saved
- 
+
  Returns true if creating vector was successful
  */
 bool matrixFromString(std::string input, std::vector<std::vector<std::string> >& out){
-	
+
 	int c = -1;
 	int r = 0;
 	std::vector<std::string> values;
-	
+
 	ensure_whitespace(input, ",;\"");
 	std::vector<std::string> tokens = parse(input, " ");
-	
+
 	int ticker = 0;
 	bool add_line = false;
 	bool req_commas = false;
@@ -248,7 +248,7 @@ bool matrixFromString(std::string input, std::vector<std::vector<std::string> >&
 	for (int i = 0 ; i < tokens.size() ; i++){
 		if (tokens[i].length() > 0 && tokens[i][0] == '\"'){
 			in_string = !in_string;
-			
+
 			//If string ends, add build_string to list of strings
 			if (!in_string){
 				values.push_back((build_string));
@@ -271,7 +271,7 @@ bool matrixFromString(std::string input, std::vector<std::vector<std::string> >&
 				}
 				build_string = build_string + tokens[i].substr(1);
 			}
-			
+
 		}else if(tokens[i] == ";"){
 			if (phase == 'c'){
 				std::cout << "ERROR: Failed to create matrix from string - semicolon can not follow a comma. String:\n\t'" << input << "'" << std::endl;
@@ -282,7 +282,7 @@ bool matrixFromString(std::string input, std::vector<std::vector<std::string> >&
 			}else if(phase == 'V'){
 				build_string = build_string + ";";
 			}
-			
+
 			if (c == -1){
 				c = ticker;
 			}else if(c != ticker){
@@ -310,17 +310,17 @@ bool matrixFromString(std::string input, std::vector<std::vector<std::string> >&
 				std::cout << "ERROR: Failed to create matrix from string - Unidentified token (Token " << i << "): '" << tokens[i] << "'. String:\n\t'" << input << "'" << std::endl;
 				return false;
 			}
-			
+
 			if (build_string.length() > 0) build_string = build_string + " ";
 			build_string = build_string + tokens[i];
 		}
 	}
-	
+
 	if (add_line){
 		c = ticker;
 		r++;
 	}
-	
+
 	if (r < 0 || c < 0) return false;
 	//Resize and fill array
 	out.clear();
@@ -332,7 +332,7 @@ bool matrixFromString(std::string input, std::vector<std::vector<std::string> >&
 		}
 		out.push_back(temp);
 	}
-	
+
 	return true;
 }
 
@@ -374,7 +374,7 @@ std::string limited_template_to_string(double x){
 	ss.precision(20);
 	ss << x;
 	return ss.str();
-	
+
 }
 
 std::string limited_template_to_string(bool x){

@@ -11,7 +11,7 @@
 
 #include <stdio.h>
 #include <string>
-#include <GiesbrechtCPP/string_manip.hpp>
+#include "string_manip.hpp"
 #include <iostream>
 #include <exception>
 #include <cmath>
@@ -20,9 +20,9 @@
 
 template <class T>
 class KVector : public KMatrix<T> {
-	
+
 public:
-	
+
 	//KVector native constructors
 	KVector();
 	KVector(int elements);
@@ -31,61 +31,61 @@ public:
 	KVector(std::string init);
 	KVector(T* init, int elements);
 	KVector(T init, int elements);
-	
+
 	//From KMatrix (redefined to prevent multi-row vectors)
 	KVector(int rows, int cols);
 	KVector(T** init, int rows, int cols);
 	KVector(T init, int rows, int cols);
 	KVector(std::vector<std::vector<T> > init);
 	KVector(const KMatrix<T>& init);
-	
+
 	void clear();
 	void clear(size_t elements);
-	
+
 	T get(int element) const;
 	std::vector<T> get_vec();
 	KVector<T>& operator=(KVector rh);
 	KVector<T>& operator=(std::string rv);
 	KVector<T>& operator=(std::vector<T> rv);
-	
+
 	size_t size() const;
 	void setSize(size_t ns);
 	KVector<T> sub(size_t start, size_t len);
 	KVector<T> sub(size_t start);
-	
+
 	static KVector zero(size_t elements); //TODO
 	static KVector constant(T val, size_t elements); //TODO
 	static KVector makeRange(double start, double step_size, double end); //TODO
-	
+
 	T& operator[](int idx);
-	
+
 private:
-	
+
 	/*
 	 These functions are from KMatrix and do not apply to KVector
 	 */
-	
+
 	using KMatrix<T>::clear;
-	
+
 	using KMatrix<T>::rows;
 	using KMatrix<T>::cols;
 	//	using KMatrix<T>::setSize;
-	
+
 	using KMatrix<T>::get;
 	using KMatrix<T>::get_rowv;
 	using KMatrix<T>::operator=;
-	
+
 	using KMatrix<T>::operator();
-	
+
 	using KMatrix<T>::makeRange;
 	using KMatrix<T>::zero;
 	using KMatrix<T>::constant;
-	
+
 	using KMatrix<T>::setElementMultMode;
 	using KMatrix<T>::getElementMultMode;
-	
+
 	//TODO: Block some matrix operations (such as invert)
-	
+
 };
 
 typedef KVector<double> KVec;
@@ -187,46 +187,46 @@ typedef KVector<double> KVec;
  */
 template <class T>
 KVector<T>::KVector(){
-	
+
 }
 
 /*
  Initializes the kvector to the specified size. Each element is populated with the type's defualt constructor
- 
+
  elements - number of elements
- 
+
  */
 template <class T>
 KVector<T>::KVector(int elements){
-	
+
 	clear(elements);
-	
+
 	KMatrix<T>::element_mult_mode = true;
-	
+
 }
 
 template <class T>
 KVector<T>::KVector(const KVector<T>& init){
-	
+
 	//Resize matrix
 	clear(init.size());
-	
+
 	KMatrix<T>::element_mult_mode = true;
-	
+
 	//Populate matrix
 	for (int c = 0 ; c < init.size() ; c++){
 		KMatrix<T>::mat[0][c] = init.get(c);
 	}
-	
+
 }
 
 template <class T>
 KVector<T>::KVector(std::vector<T> init){
-	
+
 	clear();
-	
+
 	KMatrix<T>::mat.push_back(init);
-	
+
 	KMatrix<T>::element_mult_mode = true;
 }
 
@@ -235,7 +235,7 @@ KVector<T>::KVector(std::vector<T> init){
 /*
  Initializes the KVector from a string. (ONLY WORKS FOR KVector<double>. ALL OTHER TYPES WILL THROW AN EXCEPTION).
  If it fails without throwing an exception, the vector will be of size 0.
- 
+
  init - string to initialize matrix. String matrix representation is defined by:
  * Surrounding the string with square brackets ('[]') is optional.
  * Commas separate variables in one row
@@ -244,26 +244,26 @@ KVector<T>::KVector(std::vector<T> init){
  */
 template <class T>
 KVector<T>::KVector(std::string init){
-	
+
 	//Clear matrix
 	KMatrix<T>::mat.clear();
-	
+
 	//Create a temporary matrix
 	std::vector<std::vector<T> > temp_mat;
-	
+
 	//Read the string
 	if (matrixFromString(init, temp_mat)){
 		if (temp_mat.size() > 0){ //If the temp matrix isn't empty, copy the first row only
 			KMatrix<T>::mat.push_back(temp_mat[0]);
 		}
 	}
-	
+
 	KMatrix<T>::element_mult_mode = true;
 }
 
 template <class T>
 KVector<T>::KVector(T* init, int elements){
-	
+
 	clear();
 	std::vector<T> temp;
 	temp.resize(elements);
@@ -271,15 +271,15 @@ KVector<T>::KVector(T* init, int elements){
 		temp[i] = init[i];
 	}
 	KMatrix<T>::mat.push_back(temp);
-	
+
 	KMatrix<T>::element_mult_mode = true;
-	
+
 }
 
 
 template <class T>
 KVector<T>::KVector(T init, int elements){
-	
+
 	KMatrix<T>::clear();
 	std::vector<T> temp;
 	temp.resize(elements);
@@ -287,7 +287,7 @@ KVector<T>::KVector(T init, int elements){
 		temp[i] = init;
 	}
 	KMatrix<T>::mat.push_back(temp);
-	
+
 	KMatrix<T>::element_mult_mode = true;
 }
 
@@ -296,17 +296,17 @@ KVector<T>::KVector(T init, int elements){
  THIS FUNCTION IS CARRIED OVER FROM KMATRIX - IT IS NOT DESIGNED TO BE USED WITH KVECTOR
  No errors will be thrown, but 'rows' variable will be unused and code readibility will suffer.
  ****************************************************************************************************
- 
+
  Initializes the kvector to the size 'cols', populating each element with the value of 'init' at that cell.
- 
+
  rows - Unused
  cols - number of columns in matrix
  */
 template <class T>
 KVector<T>::KVector(int rows, int cols){
-	
+
 	clear(cols);
-	
+
 	KMatrix<T>::element_mult_mode = true;
 }
 
@@ -315,16 +315,16 @@ KVector<T>::KVector(int rows, int cols){
  THIS FUNCTION IS CARRIED OVER FROM KMATRIX - IT IS NOT DESIGNED TO BE USED WITH KVECTOR
  No errors will be thrown, but 'rows' variable will be unused and code readibility will suffer.
  ****************************************************************************************************
- 
+
  Initializes the kvector to the size 'cols', populating each element with the value of 'init' at that cell.
- 
+
  init - array from which to fill each element
  rows - Unused
  cols - number of columns in matrix
  */
 template <class T>
 KVector<T>::KVector(T** init, int rows, int cols){
-	
+
 	clear();
 	std::vector<T> temp;
 	temp.resize(cols);
@@ -332,7 +332,7 @@ KVector<T>::KVector(T** init, int rows, int cols){
 		temp[i] = init[0][i];
 	}
 	KMatrix<T>::mat.push_back(temp);
-	
+
 	KMatrix<T>::element_mult_mode = true;
 }
 
@@ -341,16 +341,16 @@ KVector<T>::KVector(T** init, int rows, int cols){
  THIS FUNCTION IS CARRIED OVER FROM KMATRIX - IT IS NOT DESIGNED TO BE USED WITH KVECTOR
  No errors will be thrown, but 'rows' variable will be unused and code readibility will suffer.
  ****************************************************************************************************
- 
+
  Initializes the matrix to the size 'cols', populating each element with the value 'init'.
- 
+
  init - value with which to fill each element
  rows - unused
  cols - number of columns in matrix
  */
 template <class T>
 KVector<T>::KVector(T init, int rows, int cols){
-	
+
 	KMatrix<T>::clear();
 	std::vector<T> temp;
 	temp.resize(cols);
@@ -358,7 +358,7 @@ KVector<T>::KVector(T init, int rows, int cols){
 		temp[i] = init;
 	}
 	KMatrix<T>::mat.push_back(temp);
-	
+
 	KMatrix<T>::element_mult_mode = true;
 }
 
@@ -367,19 +367,19 @@ KVector<T>::KVector(T init, int rows, int cols){
  THIS FUNCTION IS CARRIED OVER FROM KMATRIX - IT IS NOT DESIGNED TO BE USED WITH KVECTOR
  No errors will be thrown, but only the first row will be used and code readibility will suffer.
  ****************************************************************************************************
- 
+
  Populates a KVector from the 2D vector 'init'.
- 
+
  init - vector from which to initialize matrix
  */
 template <class T>
 KVector<T>::KVector(std::vector<std::vector<T> > init){
-	
+
 	clear();
 	if (init.size() > 0){
 		KMatrix<T>::mat.push_back(init[0]);
 	}
-	
+
 	KMatrix<T>::element_mult_mode = true;
 }
 
@@ -388,18 +388,18 @@ KVector<T>::KVector(std::vector<std::vector<T> > init){
  THIS FUNCTION IS CARRIED OVER FROM KMATRIX - IT IS NOT DESIGNED TO BE USED WITH KVECTOR
  No errors will be thrown, but 'rows' variable will be unused and code readibility will suffer.
  ****************************************************************************************************
- 
+
  Initializes the KVector from the first row of a KMatrix
  */
 template <class T>
 KVector<T>::KVector(const KMatrix<T>& init){
-	
+
 	clear();
-	
+
 	if (init.rows() > 0){
 		KMatrix<T>::mat.push_back(init.get_rowv(0));
 	}
-	
+
 	KMatrix<T>::element_mult_mode = true;
 }
 
@@ -408,20 +408,20 @@ KVector<T>::KVector(const KMatrix<T>& init){
  */
 template <class T>
 void KVector<T>::clear(){
-	
+
 	KMatrix<T>::mat.clear();
 }
 
 /*
  Clears the KVector, and resizes to the length 'elements'. Each element is populated by the type's default constructor.
- 
+
  elements - number of elements in the KVector
- 
+
  Void return
  */
 template <class T>
 void KVector<T>::clear(size_t elements){
-	
+
 	KVector<T>::clear();
 	std::vector<T> temp;
 	temp.resize(elements);
@@ -433,25 +433,25 @@ void KVector<T>::clear(size_t elements){
  */
 template <class T>
 size_t KVector<T>::size() const{
-	
+
 	if (KMatrix<T>::mat.size() > 0){
 		return KMatrix<T>::mat[0].size();
 	}else{
 		return 0;
 	}
-	
+
 }
 
 /*
- 
+
  */
 template <class T>
 T& KVector<T>::operator[](int idx){
-	
+
 	if(KMatrix<T>::mat.size() < 1 || idx >= this->size()){
 		throw KMatrix<T>::mat_bnd_ex;
 	}
-	
+
 	return KMatrix<T>::mat[0][idx];
 }
 
@@ -468,29 +468,29 @@ T& KVector<T>::operator[](int idx){
 
 template <class T>
 T KVector<T>::get(int element) const{
-	
+
 	//Check bounds
 	if(KMatrix<T>::mat.size() < 1 || element > KMatrix<T>::mat[0].size()){
 		throw KMatrix<T>::mat_bnd_ex;
 	}
-	
+
 	return KMatrix<T>::mat[0][element];
 }
 
 template <class T>
 std::vector<T> KVector<T>::get_vec(){
-	
+
 	//Check bounds, throw error if violated
 	if (KMatrix<T>::mat.size() < 1){
 		throw KMatrix<T>::mat_bnd_ex;
 	}
-	
+
 	//Return row
 	return KMatrix<T>::mat[0];
 }
 
 /*
- 
+
  */
 template <class T>
 KVector<T>& KVector<T>::operator=(KVector rh){
@@ -500,10 +500,10 @@ KVector<T>& KVector<T>::operator=(KVector rh){
 
 template <class T>
 KVector<T>& KVector<T>::operator=(std::string init){
-	
+
 	//Create a temporary matrix
 	std::vector<std::vector<T> > temp_mat;
-	
+
 	//Read the string
 	if (matrixFromString(init, temp_mat)){
 		if (temp_mat.size() > 0){ //If the temp matrix isn't empty, copy the first row only
@@ -515,7 +515,7 @@ KVector<T>& KVector<T>::operator=(std::string init){
 			KMatrix<T>::mat[0] = (temp_mat[0]);
 		}
 	}
-	
+
 	return *this;
 }
 
@@ -532,91 +532,91 @@ KVector<T>& KVector<T>::operator=(std::vector<T> rv){
 		KMatrix<T>::mat.push_back(temp);
 	}
 	KMatrix<T>::mat[0] = (rv);
-	
+
 	return *this;
 }
 
 /*
  Resizes the KVector to 'ns' elements
- 
+
  ns - new length of vector
- 
+
  Void return
  */
 template <class T>
 void KVector<T>::setSize(size_t ns){
-	
+
 	std::cout << "TF1" << std::endl;
-	
+
 	if (KMatrix<T>::mat.size() < 1){
 		std::vector<double> temp;
 		KMatrix<T>::mat.push_back(temp);
 	}
-	
+
 	std::cout << "\t\t" << KMatrix<T>::mat.size() << std::endl;
 	std::cout << "TF2" << std::endl;
-	
+
 	KMatrix<T>::mat[0].resize(ns);
-	
+
 	std::cout << "TF3" << std::endl;
 }
 
 template <class T>
 KVector<T> KVector<T>::sub(size_t start, size_t len){
-	
+
 	std::cout << "AA" << std::endl;
-	
+
 	//Check for out of bounds
 	if (start+len > this->size()){
 		len = this->size()-start;
 	}
-	
+
 	std::cout << "AB" << std::endl;
-	
+
 	KVector<T> out;
-	
+
 	std::cout << "AB-1" << std::endl;
-	
+
 	out.setSize(len);
-	
+
 	std::cout << "AC" << std::endl;
-	
+
 	for (size_t i = start ; i < (start+len) ; i++){
-		
+
 		if (i >= this->size()) break;
-		
+
 		out[i] = this->get(i);
-		
+
 		std::cout << "AD" << i << std::endl;
-		
+
 	}
-	
+
 	return out;
-	
+
 }
 
 template <class T>
 KVector<T> KVector<T>::sub(size_t start){
-	
+
 	size_t len = this->size()-start;
-	
+
 	KVector<T> out;
 	out.setSize(len);
-	
+
 	for (size_t i = start ; i < (start+len) ; i++){
-		
+
 		if (i >= this->size()) break;
-		
+
 		out[i] = this->get(i);
-		
+
 	}
-	
+
 	return out;
-	
+
 }
 
 /*
- 
+
  */
 template <class T>
 KVector<T> KVector<T>::makeRange(double start, double step_size, double end){
