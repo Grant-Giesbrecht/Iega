@@ -16,6 +16,8 @@
 #include <exception>
 #include <cmath>
 #include "KMatrixHelpers.hpp"
+#include <cstring>
+#include <typeinfo>
 
 template <class T>
 class KMatrix {

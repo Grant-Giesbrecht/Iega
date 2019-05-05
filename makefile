@@ -6,7 +6,31 @@
 # This will install KMatrix, string_manip, stdutil, KTable, & KVector
 #
 
-CC = clang++ -std=c++11
+ifeq ($(OS),Windows_NT)
+    CCFLAGS += -D WIN32
+    ifeq ($(PROCESSOR_ARCHITEW6432),AMD64)
+        #Windows things...
+    else
+        ifeq ($(PROCESSOR_ARCHITECTURE),AMD64)
+            #Windows things...
+        endif
+        ifeq ($(PROCESSOR_ARCHITECTURE),x86)
+            #Windows things...
+        endif
+    endif
+else
+    UNAME_S := $(shell uname -s)
+    ifeq ($(UNAME_S),Linux)
+        CC = g++ -std=c++11
+				echo "Linux"
+    endif
+    ifeq ($(UNAME_S),Darwin)
+        CC = clang++ -std=c++11
+				echo "OS X"
+    endif
+endif
+
+# CC = clang++ -std=c++11
 
 #Where hpp files are saved
 IEGA_INCLUDE = /usr/local/include/IEGA
